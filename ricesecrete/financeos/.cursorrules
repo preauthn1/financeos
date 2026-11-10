@@ -1,0 +1,86 @@
+# Cursor Rules for Webman + Vue Element Plus Admin Project
+
+project:
+  name: "Webman Admin System"
+  type: "fullstack"
+  backend:
+    framework: "Webman ~2.2.3"
+    language: "PHP 8.1+"
+    database: "MySQL 8.0+"
+    cache: "Redis 7.0+"
+    architecture: "MVC with Service Layer"
+  frontend:
+    framework: "Vue 3 + Element Plus"
+    admin: "Vue Element Plus Admin"
+    package_manager: "pnpm"
+    build_tool: "Vite"
+
+coding_standards:
+  php:
+    - "遵循 PSR-12 编码规范"
+    - "使用类型声明 (strict_types=1)"
+    - "控制器命名为 XxxController"
+    - "服务层命名为 XxxService"
+    - "模型命名为 Xxx (单数形式)"
+  vue:
+    - "使用 Composition API + <script setup>"
+    - "组件命名采用 PascalCase"
+    - "API 请求统一放在 src/api/ 目录"
+    - "使用 Pinia 管理状态"
+
+api_conventions:
+  response_format:
+    success: { code: 200, msg: "success", data: {} }
+    error: { code: 40001, msg: "error message", data: null }
+  error_codes: "详见 docs/API.md#错误码"
+  authentication: "JWT (Bearer Token + refresh_token)"
+  token_ttl:
+    access: "2 hours (JWT_ACCESS_TTL=7200)"
+    refresh: "7 days (JWT_REFRESH_TTL=604800)"
+  routes:
+    admin: "/admin/*"  # 后台管理接口
+    api: "/api/*"      # 前端公共接口
+  docs:
+    api: "docs/API.md"
+    architecture: "docs/ARCHITECTURE.md"
+    database: "docs/DATABASE.md"
+
+directory_structure:
+  backend:
+    app/
+      admin/controller/   # 后台控制器
+      api/controller/     # 前端API控制器
+      model/              # 数据模型
+      service/            # 业务逻辑层
+      middleware/         # 中间件
+    config/               # 配置文件
+    database/migrations/  # 数据库迁移
+    config/
+      route.php           # 路由入口
+      routes/             # 路由定义（admin.php / api.php）
+    public/               # 静态资源
+  frontend:
+    src/
+      api/                # API请求封装
+      assets/             # 静态资源
+      components/         # 公共组件
+      composables/        # 组合式函数
+      layouts/            # 布局组件
+      router/             # 路由配置
+      stores/             # Pinia状态管理
+      types/              # TypeScript类型定义
+      utils/              # 工具函数
+      views/              # 页面视图
+
+development_workflow:
+  - "后端开发: 先定义路由 → 创建控制器 → 实现Service → 编写模型"
+  - "前端开发: 先定义API → 创建页面 → 配置路由 → 联调测试"
+  - "权限管理: 基于RBAC模型，使用中间件验证"
+  - "数据库: 使用迁移管理表结构变更"
+
+ai_assistance_preferences:
+  - "优先使用项目现有模式和代码风格"
+  - "生成代码时包含完整的错误处理"
+  - "API接口要包含参数验证和类型提示"
+  - "生成控制器时同时生成对应的Service"
+  - "前端组件要包含TypeScript类型定义"

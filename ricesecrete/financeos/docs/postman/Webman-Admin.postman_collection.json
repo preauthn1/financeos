@@ -1,0 +1,207 @@
+{
+  "info": {
+    "name": "Webman Admin API",
+    "description": "Webman + Vue Element Plus Admin 后台管理系统 API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    { "key": "baseUrl", "value": "http://127.0.0.1:8787" },
+    { "key": "token", "value": "" },
+    { "key": "refresh_token", "value": "" }
+  ],
+  "item": [
+    {
+      "name": "认证",
+      "item": [
+        {
+          "name": "登录",
+          "event": [{
+            "listen": "test",
+            "script": {
+              "exec": [
+                "const res = pm.response.json();",
+                "if (res.code === 200) {",
+                "  pm.collectionVariables.set('token', res.data.token);",
+                "  pm.collectionVariables.set('refresh_token', res.data.refresh_token);",
+                "}"
+              ]
+            }
+          }],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"username\": \"admin\",\n  \"password\": \"admin123\"\n}" },
+            "url": "{{baseUrl}}/admin/login"
+          }
+        },
+        {
+          "name": "刷新Token",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"refresh_token\": \"{{refresh_token}}\"\n}" },
+            "url": "{{baseUrl}}/admin/refresh"
+          }
+        },
+        {
+          "name": "当前用户",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": "{{baseUrl}}/admin/me"
+          }
+        },
+        {
+          "name": "用户菜单",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": "{{baseUrl}}/admin/menus"
+          }
+        },
+        {
+          "name": "登出",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{token}}" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": { "mode": "raw", "raw": "{\n  \"refresh_token\": \"{{refresh_token}}\"\n}" },
+            "url": "{{baseUrl}}/admin/logout"
+          }
+        }
+      ]
+    },
+    {
+      "name": "管理员",
+      "item": [
+        {
+          "name": "列表",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": { "raw": "{{baseUrl}}/admin/admins?page=1&limit=10", "host": ["{{baseUrl}}"], "path": ["admin", "admins"], "query": [{ "key": "page", "value": "1" }, { "key": "limit", "value": "10" }] }
+          }
+        },
+        {
+          "name": "创建",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{token}}" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": { "mode": "raw", "raw": "{\n  \"username\": \"editor01\",\n  \"password\": \"123456\",\n  \"nickname\": \"编辑员\",\n  \"status\": 1,\n  \"role_ids\": [2]\n}" },
+            "url": "{{baseUrl}}/admin/admins"
+          }
+        }
+      ]
+    },
+    {
+      "name": "角色",
+      "item": [
+        {
+          "name": "列表",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": "{{baseUrl}}/admin/roles"
+          }
+        },
+        {
+          "name": "角色权限",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": "{{baseUrl}}/admin/roles/2/permissions"
+          }
+        }
+      ]
+    },
+    {
+      "name": "权限",
+      "item": [
+        {
+          "name": "权限树",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": "{{baseUrl}}/admin/permissions"
+          }
+        }
+      ]
+    },
+    {
+      "name": "文章",
+      "item": [
+        {
+          "name": "后台列表",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": "{{baseUrl}}/admin/articles"
+          }
+        },
+        {
+          "name": "创建文章",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{token}}" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": { "mode": "raw", "raw": "{\n  \"title\": \"Postman 测试文章\",\n  \"content\": \"<p>内容</p>\",\n  \"summary\": \"摘要\",\n  \"status\": 1\n}" },
+            "url": "{{baseUrl}}/admin/articles"
+          }
+        },
+        {
+          "name": "公共列表",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/articles"
+          }
+        }
+      ]
+    },
+    {
+      "name": "分类",
+      "item": [
+        {
+          "name": "列表",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": "{{baseUrl}}/admin/categories"
+          }
+        }
+      ]
+    },
+    {
+      "name": "系统配置",
+      "item": [
+        {
+          "name": "配置列表",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": "{{baseUrl}}/admin/settings"
+          }
+        }
+      ]
+    },
+    {
+      "name": "操作日志",
+      "item": [
+        {
+          "name": "日志列表",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": "{{baseUrl}}/admin/logs"
+          }
+        }
+      ]
+    }
+  ]
+}

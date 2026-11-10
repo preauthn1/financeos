@@ -1,0 +1,15 @@
+/runtime
+/.idea
+/.vscode
+/vendor
+*.log
+.env
+/tests/tmp
+/tests/.phpunit.result.cache
+/.phpunit.cache
+/web/node_modules
+/web/dist
+/frontend/node_modules
+/frontend/dist
+/build
+/build/stage
